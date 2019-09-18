@@ -6,10 +6,10 @@ import os
 import logging
 import argparse
 from urllib.request import urlopen, urlretrieve
-from bs4 import BeautifulSoup
 import pandas as pd
-from tqdm import tqdm
+from bs4 import BeautifulSoup
 import instaloader
+from tqdm import tqdm
 
 
 def download_with_bs4(post_url, post_photo_folder, social_media):
