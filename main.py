@@ -12,35 +12,30 @@ import instaloader
 from tqdm import tqdm
 
 
-def download_with_bs4(post_url, post_photo_folder, social_media):
-    """Downloads photos from Twitter or Facebook with bs4"""
-
-    img_css_class = {'TWITTER': 'AdaptiveMedia-photoContainer js-adaptive-photo',
-                     'FACEBOOK': 'someting else'}
-    img_css_source = {'TWITTER': 'data-image-url',
-                      'FACEBOOK': 'src'}
+def download_twitter_photo(tweet_url, tweet_photo_folder):
+    """Downloads photos from Twitter with bs4"""
 
     try:
         # Open post and make soup
-        post_html = urlopen(post_url)
-        soup = BeautifulSoup(post_html, 'lxml')
+        tweet_html = urlopen(tweet_url)
+        soup = BeautifulSoup(tweet_html, 'lxml')
 
         # Find image using platform specific tag
-        img = soup.find("div", {"class": img_css_class[social_media]})
+        img = soup.find("div", {"class": 'AdaptiveMedia-photoContainer js-adaptive-photo')
 
         # Get image url using platform specific tag
-        img_url = img.get(img_css_source[social_media])
+        img_url = img.get('data-image-url')
 
         # Urls aren't allowed in filenames, so we change / to -
         filename = post_url.split('.com/')[1].replace('/', '-') + '.jpg'
 
         # Keep a log of changed filenames, for each social media
-        with open(f'{media}_name_log.csv', 'w') as log_file:
+        with open(f'twitter_name_log.csv', 'w') as log_file:
             writer = csv.writer(log_file)
             writer.writerow([img_url, filename])
 
         # Download photo
-        filepath = os.path.join(post_photo_folder, filename)
+        filepath = os.path.join(tweet_photo_folder, filename)
         urlretrieve(img_url, filepath)
 
     except:
@@ -89,7 +84,7 @@ for so_me in SOCIAL_MEDIA:
 
     # Scrape photos
     for url in tqdm(links):
-        if so_me in ['FACEBOOK', 'TWITTER']:
-            download_with_bs4(url, photo_folder, so_me)
+        if so_me == 'TWITTER':
+            download_twitter_photo(url, photo_folder)
         if so_me == 'INSTAGRAM':
             download_instagram_photo(url, photo_folder)
