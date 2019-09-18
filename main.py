@@ -1,4 +1,4 @@
-"""Scrapes Sprinklr data"""
+"""Scrapes IBM data"""
 
 
 import logging
@@ -27,7 +27,7 @@ def setup_logger(name, log_file, level=logging.INFO):
 
 
 def download_twitter_photo(tweet_url):
-    """Downloads photos"""
+    """Downloads photos from Twitter"""
     try:
         tweet_html = urlopen(tweet_url)
         soup = BeautifulSoup(tweet_html, 'lxml')
@@ -41,17 +41,18 @@ def download_twitter_photo(tweet_url):
 
 
 def download_instagram_photo(instagram_url):
+    """Downloads photos from Instagram"""
     try:
         shortcode = instagram_url.split('/')[-2]
         post = Post.from_shortcode(L.context, shortcode)
-        L.download_post(post=post, target='instragram_posts')
+        L.download_post(post=post, target='posts')
     except:
         INSTAGRAM_LOGGER.exception(f'{instagram_url} was not downloaded')
         pass
 
 
 # Set up argparse
-PARSER = argparse.ArgumentParser(description='Scrape Sprinklr data.')
+PARSER = argparse.ArgumentParser(description='Scrape IBN data.')
 PARSER.add_argument('datafile', help='Path to your data file')
 ARGS = PARSER.parse_args()
 
@@ -64,13 +65,13 @@ DATA = pd.read_csv(ARGS.datafile, low_memory=False)
 
 # Twitter scrape
 print('Scraping Twitter...')
-TWITTER_LINKS = DATA[DATA['SocialNetwork'] == 'TWITTER']['Permalink']
-for tweet in tqdm(TWITTER_LINKS):
+TWITTER_DATA = DATA[DATA['SocialNetwork'] == 'TWITTER']
+for tweet in tqdm(TWITTER_DATA['Permalink']):
     download_twitter_photo(tweet)
 
 # Instagram scrape
 L = instaloader.Instaloader()
 print('Scraping Instagram...')
-INSTAGRAM_LINKS = DATA[DATA['SocialNetwork'] == 'INSTAGRAM']['Permalink']
-for instagram_post in INSTAGRAM_LINKS:
+INSTAGRAM_DATA = DATA[DATA['SocialNetwork'] == 'INSTAGRAM']
+for instagram_post in INSTAGRAM_DATA['Permalink']:
     download_instagram_photo(instagram_post)
