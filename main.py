@@ -44,7 +44,7 @@ def download_instagram_photo(instagram_url):
     try:
         shortcode = instagram_url.split('/')[-2]
         post = Post.from_shortcode(L.context, shortcode)
-        L.download_post(post=post, target='posts')
+        L.download_post(post=post, target='instragram_posts')
     except:
         INSTAGRAM_LOGGER.exception(f'{instagram_url} was not downloaded')
         pass
