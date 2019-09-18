@@ -64,13 +64,13 @@ DATA = pd.read_csv(ARGS.datafile, low_memory=False)
 
 # Twitter scrape
 print('Scraping Twitter...')
-TWITTER_DATA = DATA[DATA['SocialNetwork'] == 'TWITTER']['Permalink']
-for tweet in tqdm(TWITTER_DATA):
+TWITTER_LINKS = DATA[DATA['SocialNetwork'] == 'TWITTER']['Permalink']
+for tweet in tqdm(TWITTER_LINKS):
     download_twitter_photo(tweet)
 
 # Instagram scrape
 L = instaloader.Instaloader()
 print('Scraping Instagram...')
-INSTAGRAM_DATA = DATA[DATA['SocialNetwork'] == 'INSTAGRAM']['Permalink']
-for instagram_post in INSTAGRAM_DATA:
+INSTAGRAM_LINKS = DATA[DATA['SocialNetwork'] == 'INSTAGRAM']['Permalink']
+for instagram_post in INSTAGRAM_LINKS:
     download_instagram_photo(instagram_post)
