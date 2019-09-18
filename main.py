@@ -1,4 +1,4 @@
-"""Scrapes IBM data"""
+"""Scrapes Sprinklr data"""
 
 
 import logging
@@ -51,7 +51,7 @@ def download_instagram_photo(instagram_url):
 
 
 # Set up argparse
-PARSER = argparse.ArgumentParser(description='Scrape IBN data.')
+PARSER = argparse.ArgumentParser(description='Scrape Sprinklr data.')
 PARSER.add_argument('datafile', help='Path to your data file')
 ARGS = PARSER.parse_args()
 
