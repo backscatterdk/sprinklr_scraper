@@ -40,14 +40,14 @@ def download_twitter_photo(tweet_url):
         TWITTER_LOGGER.exception(f'{tweet_url} was not downloaded')
 
 
-def download_instagram_photo(instagram_url):
+def download_instagram_photo(instagram_post_url):
     """Downloads photos from Instagram"""
     try:
-        shortcode = instagram_url.split('/')[-2]
+        shortcode = instagram_post_url.split('/')[-2]
         post = Post.from_shortcode(L.context, shortcode)
         L.download_post(post=post, target='posts')
     except:
-        INSTAGRAM_LOGGER.exception(f'{instagram_url} was not downloaded')
+        INSTAGRAM_LOGGER.exception(f'{instagram_post_url} was not downloaded')
         pass
 
 
